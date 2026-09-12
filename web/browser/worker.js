@@ -3,7 +3,10 @@ let engine;
 let queue = Promise.resolve();
 async function initialize(assets) {
   const bytes = name => Uint8Array.from(atob(assets[name]), c => c.charCodeAt(0));
-  const moduleURL = name => URL.createObjectURL(new Blob([bytes(name)], {type:'text/javascript'}));
+  // This data-URL worker has an opaque origin. blob:null modules cannot be
+  // imported from it on a public HTTPS page; embedded data modules work in
+  // both hosted and file:// editions without network access.
+  const moduleURL = name => 'data:text/javascript;base64,' + assets[name];
   // Runtime fetches can only resolve these embedded resources. There is no network fallback.
   globalThis.fetch = async input => {
     const url = typeof input === 'string' ? input : (input.url || String(input));
@@ -26,7 +29,6 @@ async function initialize(assets) {
   }
   engine.FS.writeFile('/home/pyodide/bridge.py', bytes('bridge.py'));
   engine.runPython('from bridge import request');
-  URL.revokeObjectURL(loaderURL); URL.revokeObjectURL(runtimeURL);
 }
 self.onmessage = ({data:message}) => {
   queue = queue.then(async () => {

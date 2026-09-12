@@ -53,7 +53,28 @@ try{
   await expect.poll(()=>page.evaluate(async()=>(await ObservatoryBrowser.api('/api/state')).events)).toBe(0);
   expect(requests.every(r=>r.method==='GET')).toBe(true);
   expect(errors).toEqual([]);
-  console.log('Hosted browser passed: static launch, offline demo/calculation/save, persisted reload, exact offline download, forget, and no uploads.');
+  // Public HTTPS origins impose worker module restrictions that localhost and
+  // file:// do not. Serve the same build on an intercepted HTTPS origin.
+  const secure=await browser.newContext();
+  await secure.route('https://observatory.example/**',async route=>{
+    const path=new URL(route.request().url()).pathname;
+    if(path!=='/'||route.request().method()!=='GET'){await route.fulfill({status:404,body:''});return;}
+    await route.fulfill({status:200,contentType:'text/html; charset=utf-8',body:await readFile(join(root,'dist/site/index.html'))});
+  });
+  const httpsPage=await secure.newPage(),httpsRequests=[];
+  httpsPage.on('request',r=>{if(/^https?:/.test(r.url()))httpsRequests.push(r.url());});
+  httpsPage.on('pageerror',e=>errors.push(e.message));
+  await httpsPage.goto('https://observatory.example/');
+  await httpsPage.waitForFunction(()=>document.querySelector('#main h1')||document.querySelector('#main h2')?.textContent.includes('Could not'),{},{timeout:60000});
+  await expect(httpsPage.getByRole('heading',{name:'Sources & privacy'})).toBeVisible();
+  await secure.setOffline(true);
+  await httpsPage.getByRole('button',{name:'Try fictional demo'}).click();
+  await expect.poll(()=>httpsPage.evaluate(async()=>(await ObservatoryBrowser.api('/api/state')).events)).toBe(72);
+  await httpsPage.locator('[data-nav="costs"]').click();
+  await expect(httpsPage.locator('[data-cost-total="baseline"]')).toHaveText('$29.40');
+  expect(httpsRequests).toEqual(['https://observatory.example/']);
+  expect(errors).toEqual([]);
+  console.log('Hosted browser passed: static launch, HTTPS worker startup, offline demo/calculation/save, persisted reload, exact offline download, forget, and no uploads.');
 }finally{
   if(browser)await browser.close();
   await new Promise(resolve=>server.close(resolve));

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Load embedded runtime modules through data URLs so the offline engine also starts on public HTTPS origins.
+
 - Add a static web edition with an offline download and explicit hosted-storage privacy guidance.
 - Use fixed historical timestamps in cost test fixtures to avoid millisecond-boundary failures on fast CI runners.
 
