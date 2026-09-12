@@ -1,0 +1,33 @@
+# Local accounting data and anything exported from it
+.data/
+*.sqlite*
+*.db
+*.db-*
+*.csv
+*.jsonl
+!examples/*.jsonl
+*.log
+*.env
+.env*
+*.pem
+*.key
+*.p12
+*.pfx
+.npmrc
+.pypirc
+.netrc
+auth.json
+.codex/
+.agents/
+.claude/
+.aws/
+.ssh/
+# Development and generated artifacts
+__pycache__/
+*.py[cod]
+.venv/
+node_modules/
+test-results/
+playwright-report/
+dist/
+.DS_Store

@@ -1,0 +1,21 @@
+{
+  "name": "session-observatory",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local Codex usage accounting and offline API cost scenarios",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test:browser": "node browser-test.mjs",
+    "test:syntax": "node --check static/app.js && node --check static/analytics.js && node --check static/costs.js && node --check static/limits.js && node --check browser/browser.js && node --check browser/worker.js && node --check scripts/build-browser.mjs",
+    "build:browser": "node scripts/build-browser.mjs",
+    "test:offline": "node browser/offline-test.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "pyodide": "314.0.6"
+  }
+}

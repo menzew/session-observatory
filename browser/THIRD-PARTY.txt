@@ -1,0 +1,25 @@
+Session Observatory browser distribution
+
+Application source: Apache License 2.0 (see the included LICENSE and NOTICE).
+The application license does not relicense its bundled runtime components.
+
+Pyodide 314.0.6 — Mozilla Public License 2.0
+Unchanged distribution files from the pinned npm pyodide package.
+Corresponding source and build recipes, available without charge:
+https://github.com/pyodide/pyodide/tree/314.0.6
+https://github.com/pyodide/pyodide/releases/tag/314.0.6
+Distribution: https://www.npmjs.com/package/pyodide/v/314.0.6
+
+Python 3.14.2 — Python Software Foundation License and incorporated notices
+https://github.com/python/cpython/tree/v3.14.2
+
+Emscripten 5.0.3 runtime/toolchain — MIT and University of Illinois/NCSA
+https://github.com/emscripten-core/emscripten/tree/5.0.3
+Includes musl (MIT), compiler-rt/libc++ (LLVM licenses), and other runtime
+components under the notices reproduced in EMSCRIPTEN.txt.
+
+SQLite — public domain: https://www.sqlite.org/copyright.html
+CPython's additional incorporated component notices are reproduced in PYTHON.txt.
+
+Full application and runtime license texts follow in the embedded notices download.
+No optional Pyodide package listed in the runtime lockfile is downloaded or bundled.

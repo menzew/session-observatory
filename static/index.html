@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Session Observatory</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"><script defer src="/limits.js"></script><script defer src="/analytics.js"></script><script defer src="/costs.js"></script><script defer src="/app.js"></script></head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<aside class="sidebar">
+  <a class="brand" href="#ledger"><span class="mark" aria-hidden="true">◎</span><span>Session<br><strong>Observatory</strong></span></a>
+  <nav aria-label="Main navigation">
+    <a href="#ledger" data-nav="ledger"><span aria-hidden="true">▤</span>Usage ledger</a>
+    <a href="#limits" data-nav="limits"><span aria-hidden="true">◴</span>Limits &amp; cycles</a>
+    <a href="#projects" data-nav="projects"><span aria-hidden="true">▦</span>Projects</a>
+    <a href="#analysis" data-nav="analysis"><span aria-hidden="true">≡</span>Consumption analysis</a>
+    <a href="#costs" data-nav="costs"><span aria-hidden="true">＄</span>Cost analysis</a>
+    <a href="#provider" data-nav="provider"><span aria-hidden="true">⇄</span>Provider records</a>
+    <a href="#activity" data-nav="activity"><span aria-hidden="true">◷</span>Accountability</a>
+    <a href="#alerts" data-nav="alerts"><span aria-hidden="true">◇</span>Alerts <span id="alert-count"></span></a>
+    <a href="#coverage" data-nav="coverage"><span aria-hidden="true">◉</span>Sources & coverage</a>
+  </nav>
+  <div class="device-block"><span class="dot"></span><strong>This computer</strong><small id="device-name">Connecting…</small><small>Local records · no credentials read</small></div>
+</aside>
+<div class="workspace">
+  <header class="topbar"><div id="breadcrumb">Accounting / Usage ledger</div><div class="top-actions"><span id="live-state" role="status">Connecting</span><button id="scan" class="quiet">Refresh sources</button><button id="open-import">Import records</button></div></header>
+  <main id="main" tabindex="-1"><div class="loading">Loading the local ledger…</div></main>
+  <footer>Observed usage is not a provider invoice. All reporting periods use UTC.</footer>
+</div>
+<dialog id="detail" aria-labelledby="detail-heading"><div id="detail-content"></div></dialog>
+<dialog id="source-dialog" aria-labelledby="source-heading">
+ <form id="source-form"><div class="dialog-head"><h2 id="source-heading">Add source folder</h2><button type="button" data-close="source-dialog" aria-label="Close source settings">×</button></div>
+ <input type="hidden" name="id">
+ <label>Source label<input name="label" required maxlength="200" placeholder="e.g. Windows ChatGPT / Work"></label>
+ <label>Folder type<select name="kind"><option value="codex_home">Codex / ChatGPT Work home</option><option value="session_folder">Session folder (JSONL logs)</option></select><small>A home contains sessions and archived_sessions. A session folder contains the logs directly or in dated subfolders.</small></label>
+ <label>Folder path<input name="path" required maxlength="4096" placeholder="C:&#92;Users&#92;alex&#92;.codex" spellcheck="false"><small>Use a full Windows, Linux or mounted share path. Windows paths can be saved before the drive is accessible.</small></label>
+ <label>Path on this server, if different<input name="access_path" maxlength="4096" placeholder="e.g. /mnt/c/Users/alex/.codex" spellcheck="false"><small>Optional mapping to an already mounted or synced folder. This setting does not mount drives or connect to another PC.</small></label>
+ <label>Where these files came from<select name="origin"><option value="external">Another computer / Windows copy</option><option value="local">This server's local Codex / Work</option></select><small>External logs keep unknown operator and device identities; the server's identity is not assigned to their requests.</small></label>
+ <label class="checkbox-label"><input name="enabled" type="checkbox" checked>Enable automatic collection</label>
+ <label>Reason for this change<textarea name="reason" rows="2" required maxlength="2000"></textarea></label>
+ <p id="source-error" class="form-error" role="alert"></p><div class="form-actions"><button type="button" data-close="source-dialog">Cancel</button><button type="submit" class="primary">Save source</button></div></form>
+</dialog>
+<dialog id="import-dialog" aria-labelledby="import-heading">
+ <form id="import-form"><div class="dialog-head"><h2 id="import-heading">Import accounting evidence</h2><button type="button" data-close="import-dialog" aria-label="Close import">×</button></div>
+ <p>Import Codex logs, OpenAI usage/cost export pages, or normalized activity records. Files are processed on this computer.</p>
+ <label>Account or workspace label<input name="scope" placeholder="e.g. Personal API organization" maxlength="200"><small>Required for provider/activity exports. This label is your declaration.</small></label>
+ <label>Evidence file<input name="file" type="file" accept=".json,.jsonl" required><small>JSON or JSONL · up to 30 MB. Do not import credentials or authentication files.</small></label>
+ <details><summary>Supported formats and coverage</summary><p>Codex JSONL is parsed for metering and context only. OpenAI exports must contain <code>data[].results[]</code> completion-usage or cost buckets. Workspace and third-party activity uses the documented <code>observatory.activity.v1</code> format in the README.</p><p>Imported records are historical, source-declared evidence. They do not establish a live connection or verify account ownership.</p></details>
+ <p class="form-error" id="import-error" role="alert"></p><div class="form-actions"><button type="button" data-close="import-dialog">Cancel</button><button type="submit" class="primary">Import evidence</button></div></form>
+</dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+</body></html>

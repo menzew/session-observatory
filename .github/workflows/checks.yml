@@ -1,0 +1,43 @@
+name: Checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  accounting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        python: ['3.10', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m unittest discover -v
+      - run: python scripts/release.py --check --check-tracked
+      - name: Build and test the standalone source release
+        run: |
+          python scripts/release.py --output dist/source.zip
+          python -m zipfile -e dist/source.zip dist/source
+          cd dist/source/session-observatory
+          python scripts/release.py --check
+          python -m unittest discover -q
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:syntax
+      - run: npm run test:browser
+      - run: npm run build:browser
+      - run: npm run test:offline
