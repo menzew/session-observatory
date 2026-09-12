@@ -2,7 +2,7 @@
 
 Session Observatory processes your selected evidence on your computer. The browser edition runs from one local HTML file, without an account connection, uploads, telemetry, or runtime downloads. You choose whether to keep a workspace snapshot or download an export.
 
-Local processing still involves private data. Project paths, task identifiers, attribution, and activity metadata can reveal what you work on and who you work with. This page explains what the application reads and retains, and where its protections end. For operating instructions, see the [browser guide](BROWSER.md). Report vulnerabilities through [SECURITY.md](SECURITY.md).
+Local processing still involves private data. Project paths, task identifiers, attribution, and activity metadata can reveal what you work on and who you work with. This page explains what the application reads and retains, and where its protections end. For operating instructions, see the [browser guide](docs/browser.md). Report vulnerabilities through [SECURITY.md](SECURITY.md).
 
 ## What happens when you open the HTML
 
@@ -69,9 +69,15 @@ All these exports can contain private metadata. They are not anonymized reports.
 
 Restoring a backup replaces this tab's workspace, not the saved browser snapshot. Choose Save afterward if you want the restored workspace to load on the next opening. Download a backup before replacing evidence you still need.
 
+## Hosted web edition
+
+The public GitHub Pages site serves the same browser app over HTTPS. Opening or reloading the page makes a request to the site host, which can receive normal request metadata such as your IP address and user agent. Once loaded, selected evidence is processed in the browser; it is not uploaded to GitHub or an application backend. Explicitly downloading the offline HTML also contacts the host.
+
+Hosted browser storage is associated with the site origin and profile, not a guaranteed per-page isolation boundary. Other Pages projects on the same origin can share that browser storage boundary. A saved hosted workspace does not automatically transfer to the downloaded local HTML: use a complete backup and restore. The downloaded version can be opened without contacting the site.
+
 ## Network boundary
 
-During normal use, the browser application makes no HTTP requests. It has no OpenAI client, account login, telemetry, remote fonts, or CDN fallback. Its Content Security Policy blocks runtime connections, frames, and form submissions. The worker loads its runtime resources from embedded bytes.
+After its initial document load, the browser application makes no HTTP requests while processing evidence. Opening the downloaded HTML directly also avoids a request for that document. It has no OpenAI client, account login, telemetry, remote fonts, or CDN fallback. Its Content Security Policy blocks runtime connections, frames, and form submissions. The worker loads its runtime resources from embedded bytes.
 
 Downloading the application initially, installing development dependencies, and clicking external documentation or runtime-source links involve network access. External links open only when clicked. The offline guarantee describes the application while processing evidence; it does not disable networking for your browser, extensions, or operating system.
 
@@ -79,7 +85,7 @@ The automated offline test opens the HTML directly with networking disabled, imp
 
 ## Optional collector edition
 
-The [collector](COLLECTOR.md) has a different storage and access boundary. A Python process reads configured folders and persists metadata automatically in a local SQLite database, normally `.data/ledger.sqlite3`. Your browser talks to that process over loopback HTTP. The app makes no OpenAI API calls, but it does use a local server.
+The [collector](docs/collector.md) has a different storage and access boundary. A Python process reads configured folders and persists metadata automatically in a local SQLite database, normally `.data/ledger.sqlite3`. Your browser talks to that process over loopback HTTP. The app makes no OpenAI API calls, but it does use a local server.
 
 Collector cost assumptions are stored separately in the browser's localStorage. Browser-edition Save and Forget controls do not manage the collector database or its browser preferences. An evidence export can migrate the collector's ledger into the browser edition, but the original database remains on disk.
 

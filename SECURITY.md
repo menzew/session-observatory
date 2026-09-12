@@ -26,7 +26,7 @@ Explicit saving uses revisions to reject stale-tab overwrites. Forget removes sa
 
 The collector binds to loopback and uses Host/Origin validation, a per-process mutation token, CSP, source-text escaping, CSV formula protection, and an allowlist of public assets. It has no remote-user authentication. A process running with the same OS privileges can access the service or local data; do not expose the listener to an untrusted network.
 
-The collector intentionally reads configured session logs and persists permitted accounting metadata to SQLite. It does not log in to OpenAI, open Codex authentication files as accounting sources, or intercept model requests. Database permissions are best effort and platform-dependent; the application does not encrypt the database. See [collector operation](COLLECTOR.md).
+The collector intentionally reads configured session logs and persists permitted accounting metadata to SQLite. It does not log in to OpenAI, open Codex authentication files as accounting sources, or intercept model requests. Database permissions are best effort and platform-dependent; the application does not encrypt the database. See [collector operation](docs/collector.md).
 
 ## Evidence integrity and scope
 
@@ -36,4 +36,4 @@ A local audit hash chain detects inconsistencies, not an operator rewriting both
 
 Build public source archives with [scripts/release.py](scripts/release.py) and the reviewed file allowlist. Local data, exports, agent configuration, and generated test screenshots are excluded. Automated credential scans supplement human review; they do not establish that arbitrary metadata is safe to publish or scan Git history.
 
-Public screenshots and reproductions must use synthetic data. Preserve runtime license texts and source references, test the generated HTML offline, and follow [Releasing](RELEASING.md).
+Public screenshots and reproductions must use synthetic data. Preserve runtime license texts and source references, test the generated HTML offline, and follow [Releasing](docs/releasing.md).

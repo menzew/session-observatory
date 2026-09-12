@@ -41,3 +41,5 @@ jobs:
       - run: npm run test:browser
       - run: npm run build:browser
       - run: npm run test:offline
+      - run: npm run build:pages
+      - run: npm run test:hosted

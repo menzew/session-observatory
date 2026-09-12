@@ -9,10 +9,12 @@
     "node": ">=22"
   },
   "scripts": {
-    "test:browser": "node browser-test.mjs",
-    "test:syntax": "node --check static/app.js && node --check static/analytics.js && node --check static/costs.js && node --check static/limits.js && node --check browser/browser.js && node --check browser/worker.js && node --check scripts/build-browser.mjs",
+    "test:browser": "node tests/browser/collector.mjs",
+    "test:syntax": "node --check web/app.js && node --check web/analytics.js && node --check web/costs.js && node --check web/limits.js && node --check web/browser/browser.js && node --check web/browser/worker.js && node --check scripts/build-browser.mjs && node --check tests/browser/collector.mjs && node --check tests/browser/offline.mjs && node --check scripts/build-pages.mjs && node --check tests/browser/hosted.mjs",
     "build:browser": "node scripts/build-browser.mjs",
-    "test:offline": "node browser/offline-test.mjs"
+    "test:offline": "node tests/browser/offline.mjs",
+    "build:pages": "npm run build:browser && node scripts/build-pages.mjs",
+    "test:hosted": "node tests/browser/hosted.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

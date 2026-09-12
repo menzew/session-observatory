@@ -6,6 +6,10 @@ Session Observatory turns local Codex logs into a searchable usage ledger, inter
 
 No installation, server, account connection, or API key is needed to use the browser download. The app does not upload your files, send telemetry, or download runtime assets. Evidence stays in memory until you choose to save or export it; a previously saved workspace loads when you reopen the app.
 
+## Try it on the web
+
+[Open Session Observatory](https://menzew.github.io/session-observatory-web/) and choose **Try fictional demo**, or select your own log folder. The site serves the app; evidence processing stays in your browser. To use it without visiting a website, download the offline app from that page.
+
 ## Start in your browser
 
 1. Download **session-observatory-browser.html** from this repository's Releases page. Use the HTML attachment, not GitHub's automatic source ZIP.
@@ -13,7 +17,7 @@ No installation, server, account connection, or API key is needed to use the bro
 3. Choose **Try fictional demo** to explore without reading your logs, or **Choose Codex log folder** to import your own evidence.
 4. Open **Consumption analysis** or **Cost analysis**. Re-select a folder whenever you want to import newer records.
 
-Nothing is scanned automatically. You can disconnect from the internet before opening the HTML. The [browser walkthrough](BROWSER.md) covers log locations, saving, backups, migration, and troubleshooting.
+Nothing is scanned automatically. You can disconnect from the internet before opening the HTML. The [browser walkthrough](docs/browser.md) covers log locations, saving, backups, migration, and troubleshooting.
 
 ![Cost analysis using fictional demo records](docs/images/cost-analysis.png)
 
@@ -55,23 +59,38 @@ Open `dist/session-observatory-browser.html`. Dependency installation requires n
 
 ## Optional automatic collection
 
-For automatic folder rescanning, a separate [Python collector edition](COLLECTOR.md) runs a loopback server and stores metadata in a local database. It has a different persistence model from the browser edition. Use it when you need ongoing collection while its process is running.
+For automatic folder rescanning, a separate [Python collector edition](docs/collector.md) runs a loopback server and stores metadata in a local database. It has a different persistence model from the browser edition. Use it when you need ongoing collection while its process is running.
+
+## Repository layout
+
+```text
+web/                 Browser interface and offline adapter
+engine/              Shared accounting engine, embedded via WebAssembly
+collector/           Optional Python loopback server
+tests/              Python regressions and browser integration tests
+docs/               User guides, architecture, and release instructions
+scripts/            Browser builder and reviewed source packaging
+third_party/        Bundled runtime notices and licenses
+examples/           Synthetic import evidence
+```
+
+The browser download runs the Python accounting engine inside bundled Pyodide; users need no Python installation. The optional collector reuses that engine. See [architecture](docs/architecture.md) for how the pieces fit together and [Contributing](CONTRIBUTING.md) for development commands.
 
 ## Documentation
 
 | Read this | For |
 |---|---|
-| [Browser guide](BROWSER.md) | First use, imports, saving, backups, and troubleshooting |
+| [Browser guide](docs/browser.md) | First use, imports, saving, backups, and troubleshooting |
 | [Privacy](PRIVACY.md) | What is read, retained, shared, and deleted |
-| [User guide](GUIDE.md) | Ledger features, attribution, accounting rules, and import formats |
-| [Analytics](ANALYTICS.md) / [Cost analysis](COSTS.md) | Chart definitions and pricing assumptions |
-| [Windows and source folders](WINDOWS-SOURCES.md) | Native, WSL, copied, and custom-home logs |
-| [Collector](COLLECTOR.md) | Optional server setup and database handling |
-| [Contributing](CONTRIBUTING.md) / [Releasing](RELEASING.md) | Development checks and public artifacts |
+| [User guide](docs/guide.md) | Ledger features, attribution, accounting rules, and import formats |
+| [Analytics](docs/analytics.md) / [Cost analysis](docs/costs.md) | Chart definitions and pricing assumptions |
+| [Windows and source folders](docs/windows.md) | Native, WSL, copied, and custom-home logs |
+| [Collector](docs/collector.md) | Optional server setup and database handling |
+| [Contributing](CONTRIBUTING.md) / [Releasing](docs/releasing.md) | Development checks and public artifacts |
 | [Security policy](SECURITY.md) | Reporting a vulnerability and the protection boundary |
 
-[Background research](docs/RESEARCH.md) is a dated design proposal; it includes integrations that are not implemented.
+[Background research](docs/research.md) is a dated design proposal; it includes integrations that are not implemented.
 
 ## License
 
-[Apache License 2.0](LICENSE), with [NOTICE](NOTICE). The browser runtime retains its upstream licenses, including Pyodide MPL-2.0; see [third-party notices](browser/THIRD-PARTY.txt).
+[Apache License 2.0](LICENSE), with [NOTICE](NOTICE). The browser runtime retains its upstream licenses, including Pyodide MPL-2.0; see [third-party notices](third_party/NOTICE.txt).

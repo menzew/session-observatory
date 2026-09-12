@@ -1,6 +1,6 @@
 # Contributing
 
-Session Observatory is a browser-first, local accounting tool. Start with the [README](README.md), [browser guide](BROWSER.md), and [privacy boundary](PRIVACY.md). The [user guide](GUIDE.md) defines evidence formats and accounting behavior. [PRODUCT.md](PRODUCT.md) and [DESIGN.md](DESIGN.md) describe the product and interface principles.
+Session Observatory is a browser-first, local accounting tool. Start with the [README](README.md), [browser guide](docs/browser.md), and [privacy boundary](PRIVACY.md). The [user guide](docs/guide.md) defines evidence formats and accounting behavior. [Product scope](docs/product.md) and [Design principles](docs/design.md) describe the product and interface principles.
 
 ## Build and try the browser edition
 
@@ -11,21 +11,23 @@ npm ci --ignore-scripts
 npm run build:browser
 ```
 
-Open `dist/session-observatory-browser.html` and choose **Try fictional demo**. Use synthetic data for development, screenshots, and reports. For collector development, run `python3 server.py --demo` and follow [the collector guide](COLLECTOR.md).
+Open `dist/session-observatory-browser.html` and choose **Try fictional demo**. Use synthetic data for development, screenshots, and reports. For collector development, run `python3 -m collector --demo` and follow [the collector guide](docs/collector.md).
 
 ## Source map
 
-| Files | Responsibility |
+| Location | Responsibility |
 |---|---|
-| `ledger.py`, `analytics.py`, `costs.py`, `limits.py` | Shared evidence, accounting, analysis, pricing, and quota logic |
-| `static/` | Shared interface, styles, filtering, and interaction |
-| `browser/browser.js` | File pickers, worker calls, browser saving, backups, and deletion |
-| `browser/worker.js`, `browser/bridge.py` | Embedded runtime and in-process access to the shared engine |
-| `scripts/build-browser.mjs` | Explicit asset embedding and browser artifact checksums |
-| `server.py` | Optional loopback collector and HTTP interface |
-| `demo.py`, `examples/`, `test_*.py` | Synthetic fixtures and engine/collector tests |
-| `browser/offline-test.mjs`, `browser-test.mjs` | Offline HTML and collector browser checks |
-| `scripts/release.py`, `RELEASE_FILES.txt` | Reviewed public source archive boundary |
+| `web/` | Shared browser interface, styles, filtering, and interaction |
+| `web/browser/` | Offline file pickers, worker, in-process bridge, saving, and backups |
+| `engine/` | Accounting, evidence, analysis, pricing, quotas, and synthetic demo data; embedded into the browser runtime |
+| `collector/` | Optional loopback server; launch from the repository root with `python3 -m collector` |
+| `tests/test_*.py` | Shared-engine, collector, bridge, and release regressions |
+| `tests/browser/` | Offline HTML and collector browser integration checks |
+| `scripts/` | Explicit browser asset embedding, source archive builder, and public file allowlist |
+| `third_party/` | Bundled runtime license texts and source references |
+| `docs/`, `examples/` | Detailed guides and synthetic import examples |
+
+Read the [architecture guide](docs/architecture.md) before changing the boundary between browser, engine, and collector. Run commands from the repository root; no Python package installation or `PYTHONPATH` customization is required.
 
 ## Required checks
 
@@ -39,6 +41,8 @@ npm run test:syntax
 npm run build:browser
 npm run test:offline
 npm run test:browser
+npm run build:pages
+npm run test:hosted
 python3 scripts/release.py --check
 ```
 
@@ -46,7 +50,7 @@ The offline suite opens the HTML directly with networking disabled and uses only
 
 Set `OBSERVATORY_BROWSER` to use an existing compatible Chromium executable. On Windows, `py -3` can replace `python3` for manual Python commands. The browser integration harness currently invokes `python3` itself. Linux/WSL is the verified development environment; native Windows/macOS validation is welcome.
 
-In a Git checkout, run `python3 scripts/release.py --check --check-tracked` after staging changes. CI rejects tracked files outside `RELEASE_FILES.txt`, even if `.gitignore` matches them. Add new public source or documentation files to the manifest in the same change. See [Releasing](RELEASING.md) for standalone archive verification.
+In a Git checkout, run `python3 scripts/release.py --check --check-tracked` after staging changes. CI rejects tracked files outside `scripts/release-files.txt`, even if `.gitignore` matches them. Add new public source or documentation files to the manifest in the same change. See [Releasing](docs/releasing.md) for standalone archive verification.
 
 ## Preserve the privacy contract
 
@@ -59,7 +63,7 @@ Changes to imports, storage, exports, or the build must preserve the documented 
 - Backups contain private metadata. Restore validates data in the app's schema and must preserve the current ledger on failure.
 - Forget clears the current workspace and saved evidence while preserving the stale-tab protection. Its limits must remain explicit.
 
-Update [PRIVACY.md](PRIVACY.md) and [BROWSER.md](BROWSER.md) whenever these behaviors change, and cover the resulting behavior in the offline tests. No real databases, rollout files, account labels, keys, prompts, private paths, or personal screenshots belong in issues or pull requests. Report vulnerabilities through [SECURITY.md](SECURITY.md).
+Update [Privacy](PRIVACY.md) and [Browser guide](docs/browser.md) whenever these behaviors change, and cover the resulting behavior in the offline tests. No real databases, rollout files, account labels, keys, prompts, private paths, or personal screenshots belong in issues or pull requests. Report vulnerabilities through [SECURITY.md](SECURITY.md).
 
 ## Make a focused change
 

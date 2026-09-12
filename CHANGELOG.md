@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add a static web edition with an offline download and explicit hosted-storage privacy guidance.
+- Use fixed historical timestamps in cost test fixtures to avoid millisecond-boundary failures on fast CI runners.
+
+- Organize browser code, embedded engine, optional collector, tests, guides, and runtime notices into dedicated folders. Launch the collector with `python3 -m collector`; browser build commands remain unchanged.
+
 - Reorganize documentation around browser use, with dedicated privacy and optional collector guides, explicit storage/deletion boundaries, and backup/migration instructions.
 
 - Clarify the source checkout and browser download setup paths.

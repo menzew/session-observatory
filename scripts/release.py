@@ -30,7 +30,7 @@ PRIVATE_FILE = re.compile(
 
 
 def release_files(root=ROOT):
-    manifest=root/'RELEASE_FILES.txt'
+    manifest=root/'scripts'/'release-files.txt'
     names=[line.strip() for line in manifest.read_text(encoding='utf-8').splitlines() if line.strip() and not line.lstrip().startswith('#')]
     if len(names)!=len(set(names)):raise ValueError('Duplicate release manifest entry.')
     if 'LICENSE' not in names:raise ValueError('A license is required.')
